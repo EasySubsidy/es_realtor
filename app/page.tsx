@@ -1,4 +1,4 @@
-import { Form } from "@/app/view/form";
+import { Form } from "@/app/view/testform";
 
 export default function Home() {
   return (

@@ -1,184 +1,242 @@
-"use client";
+// "use client";
 
-import { useForm } from "react-hook-form";
-import Image from "next/image";
+// import { useForm, Resolver, SubmitHandler } from "react-hook-form";
+// import Image from "next/image";
+// import { useState } from "react";
 
-import { PostTenant } from "@/app/usecase";
-import { GetAddress } from "@/app/util";
+// import { PostTenant, FormValues } from "@/app/usecase";
+// import { GetAddress } from "@/app/util";
 
-export function Form() {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-    watch,
-  } = useForm();
+// const resolver: Resolver<FormValues> = async (values) => {
+//   return {
+//     values: values,
+//     errors: {
+//       title: values.title
+//         ? undefined
+//         : { type: "required", message: "This is required." },
+//       postalCode: values.postalCode
+//         ? values.postalCode.match(/^\d{3}-\d{4}$/)
+//           ? undefined
+//           : { type: "pattern", message: "This is not a valid postal code." }
+//         : { type: "required", message: "This is required." },
+//       address: values.address
+//         ? undefined
+//         : { type: "required", message: "This is required." },
+//       area: values.area
+//         ? undefined
+//         : { type: "required", message: "This is required." },
+//       rent: values.rent
+//         ? undefined
+//         : { type: "required", message: "This is required." },
+//       images: values.images
+//         ? Array.from(values.images).every((file) => file.size < 5000000) &&
+//           Array.from(values.images).every((file) =>
+//             ["image/png", "image/jpeg"].includes(file.type)
+//           )
+//           ? undefined
+//           : { type: "validate" }
+//         : { type: "required", message: "This is required." },
+//     },
+//   };
+// };
 
-  const image = watch("image");
+// export function Form() {
+//   const {
+//     register,
+//     handleSubmit,
+//     setValue,
+//     formState: { errors },
+//     watch,
+//   } = useForm<FormValues>({ resolver });
 
-  const postalCode = watch("postalCode");
+//   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const fetchAddress = async () => {
-    if (postalCode && postalCode.match(/^\d{3}-\d{4}$/)) {
-      const address: string = await GetAddress(postalCode);
-      setValue("address", address);
-    }
-  };
+//   const nextSlide = () => {
+//     setCurrentSlide((prev) => (prev + 1) % images.length);
+//   };
 
-  const onSubmit = (data: any) => {
-    PostTenant(data);
-  };
+//   const prevSlide = () => {
+//     setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
+//   };
 
-  return (
-    <form
-      onSubmit={handleSubmit((data) => onSubmit(data))}
-      className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow"
-    >
-      <div className="mb-4">
-        <label
-          htmlFor="title"
-          className="block text-sm font-semibold text-gray-700"
-        >
-          物件名:
-        </label>
-        <input
-          {...register("title", { required: true })}
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
-        />
-        {errors.propertyName && (
-          <p className="text-sm text-red-500">物件名は必須です。</p>
-        )}
-      </div>
+//   const images = watch("images");
 
-      <div className="mb-4">
-        <label
-          htmlFor="postalCode"
-          className="block text-sm font-semibold text-gray-700"
-        >
-          郵便番号:
-        </label>
-        <input
-          {...register("postalCode", {
-            required: true,
-            pattern: /^\d{3}-\d{4}$/,
-          })}
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
-          onBlur={fetchAddress}
-        />
-        {errors.postalCode && (
-          <p className="text-sm text-red-500">
-            正しい郵便番号を入力してください（例: 123-4567）。
-          </p>
-        )}
-      </div>
+//   const postalCode = watch("postalCode");
 
-      <div className="mb-4">
-        <label
-          htmlFor="address"
-          className="block text-sm font-semibold text-gray-700"
-        >
-          住所:
-        </label>
-        <input
-          {...register("address", { required: true })}
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
-        />
-        {errors.address && (
-          <p className="text-sm text-red-500">住所は必須です。</p>
-        )}
-      </div>
+//   const fetchAddress = async () => {
+//     if (postalCode && postalCode.match(/^\d{3}-\d{4}$/)) {
+//       const address: string = await GetAddress(postalCode);
+//       setValue("address", address);
+//     }
+//   };
 
-      <div className="mb-4">
-        <label
-          htmlFor="area"
-          className="block text-sm font-semibold text-gray-700"
-        >
-          面積:
-        </label>
-        <input
-          {...register("area", { required: true, pattern: /^\d+(\.\d+)?$/ })}
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
-        />
-        {errors.area && (
-          <p className="text-sm text-red-500">
-            面積を数字で入力してください（例: 50.5）。
-          </p>
-        )}
-      </div>
+//   const onSubmit: SubmitHandler<FormValues> = handleSubmit((data) => {
+//     console.log("test");
+//     PostTenant(data);
+//   });
 
-      <div className="mb-4">
-        <label
-          htmlFor="rent"
-          className="block text-sm font-semibold text-gray-700"
-        >
-          賃料:
-        </label>
-        <input
-          {...register("rent", { required: true, pattern: /^\d+(\.\d+)?$/ })}
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
-        />
-        {errors.rent && (
-          <p className="text-sm text-red-500">
-            賃料を数字で入力してください（例: 80000）。
-          </p>
-        )}
-      </div>
-      <div className="mb-4">
-        <label
-          htmlFor="image"
-          className="block text-sm font-semibold text-gray-700"
-        >
-          物件画像:
-        </label>
-        <input
-          type="file"
-          {...register("image", {
-            required: "画像ファイルを選択してください。",
-            validate: {
-              size: (files) =>
-                files[0]?.size < 5000000 ||
-                "ファイルサイズは5MB以下である必要があります。",
-              type: (files) =>
-                ["image/png", "image/jpeg"].includes(files[0]?.type) ||
-                "PNGまたはJPEG形式の画像を選択してください。",
-            },
-          })}
-          className="mt-1 block w-full text-sm text-gray-900 border-gray-300 rounded-md file:border-0 file:bg-blue-50 file:py-2 file:px-4 file:rounded-md file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
-        />
-        {errors.image && (
-          <p className="text-sm text-red-500">画像が読み込めません</p>
-        )}
-        {image && image[0] && (
-          <div className="mt-4">
-            <Image
-              src={URL.createObjectURL(image[0])}
-              width={300}
-              height={200}
-              alt="Preview"
-              className="max-w-full h-auto rounded-md"
-            />
-          </div>
-        )}
-      </div>
-      <div className="mb-4">
-        <label
-          htmlFor="description"
-          className="block text-sm font-semibold text-gray-700"
-        >
-          備考:
-        </label>
-        <textarea
-          {...register("description")}
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
-        />
-      </div>
+//   return (
+//     <form
+//       onSubmit={onSubmit}
+//       className="w-1/2 mx-auto bg-white p-8 rounded-lg shadow"
+//     >
+//       <div className="mb-4">
+//         <label
+//           htmlFor="title"
+//           className="block text-sm font-semibold text-gray-700"
+//         >
+//           物件名:
+//         </label>
+//         <input
+//           {...register("title")}
+//           id="title"
+//           className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+//         />
+//         {errors.title && (
+//           <p className="text-sm text-red-500">{errors.title.message}</p>
+//         )}
+//       </div>
 
-      <input
-        type="submit"
-        value="送信"
-        className="w-full rounded-md bg-blue-500 py-2 text-white hover:bg-blue-600"
-      />
-    </form>
-  );
-}
+//       <div className="mb-4">
+//         <label
+//           htmlFor="postalCode"
+//           className="block text-sm font-semibold text-gray-700"
+//         >
+//           郵便番号:
+//         </label>
+//         <div className="flex">
+//           <input
+//             {...register("postalCode")}
+//             id="postalCode"
+//             className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+//           />
+//           <button
+//             type="button"
+//             onClick={fetchAddress}
+//             className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md"
+//           >
+//             検索
+//           </button>
+//         </div>
+//         {errors.postalCode && (
+//           <p className="text-sm text-red-500">{errors.postalCode.message}</p>
+//         )}
+//       </div>
+
+//       <div className="mb-4">
+//         <label
+//           htmlFor="address"
+//           className="block text-sm font-semibold text-gray-700"
+//         >
+//           住所:
+//         </label>
+//         <input
+//           {...register("address")}
+//           id="address"
+//           className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+//         />
+//         {errors.address && (
+//           <p className="text-sm text-red-500">{errors.address.message}</p>
+//         )}
+//       </div>
+
+//       <div className="mb-4">
+//         <label
+//           htmlFor="area"
+//           className="block text-sm font-semibold text-gray-700"
+//         >
+//           面積:
+//         </label>
+//         <input
+//           {...register("area")}
+//           id="area"
+//           className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+//         />
+//         {errors.area && (
+//           <p className="text-sm text-red-500">{errors.area.message}</p>
+//         )}
+//       </div>
+
+//       <div className="mb-4">
+//         <label
+//           htmlFor="rent"
+//           className="block text-sm font-semibold text-gray-700"
+//         >
+//           賃料:
+//         </label>
+//         <input
+//           {...register("rent")}
+//           id="rent"
+//           className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+//         />
+//         {errors.rent && (
+//           <p className="text-sm text-red-500">{errors.rent.message}</p>
+//         )}
+//       </div>
+//       {/* <div className="mb-4">
+//         <label
+//           htmlFor="images"
+//           className="block text-sm font-semibold text-gray-700"
+//         >
+//           物件画像:
+//         </label>
+//         <input
+//           type="file"
+//           {...register("images")}
+//           id="images"
+//           className="mt-1 block w-full text-sm text-gray-900 border-gray-300 rounded-md file:border-0 file:bg-blue-50 file:py-2 file:px-4 file:rounded-md file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
+//           multiple
+//         />
+//         {errors.images && (
+//           <p className="text-sm text-red-500">{errors.images.message}</p>
+//         )}
+//         <div className="mt-4 flex justify-center">
+//           {images && images.length > 0 && (
+//             <div className="relative w-full">
+//               <div className="absolute inset-0 flex justify-between items-center">
+//                 <button
+//                   onClick={prevSlide}
+//                   className="bg-gray-200 hover:bg-gray-300 p-2 rounded-full"
+//                 >
+//                   ‹
+//                 </button>
+//                 <button
+//                   onClick={nextSlide}
+//                   className="bg-gray-200 hover:bg-gray-300 p-2 rounded-full"
+//                 >
+//                   ›
+//                 </button>
+//               </div>
+//               <Image
+//                 src={URL.createObjectURL(images[currentSlide])}
+//                 alt={`Preview ${currentSlide + 1}`}
+//                 width={300}
+//                 height={200}
+//                 className="mx-auto max-w-full h-auto rounded-md object-cover w-auto"
+//               />
+//             </div>
+//           )}
+//         </div>
+//       </div> */}
+//       <div className="mb-4">
+//         <label
+//           htmlFor="description"
+//           className="block text-sm font-semibold text-gray-700"
+//         >
+//           備考:
+//         </label>
+//         <textarea
+//           {...register("description")}
+//           id="description"
+//           className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+//         />
+//       </div>
+
+//       <input
+//         type="submit"
+//         value="送信"
+//         className="w-full rounded-md bg-blue-500 py-2 text-white hover:bg-blue-600"
+//       />
+//     </form>
+//   );
+// }

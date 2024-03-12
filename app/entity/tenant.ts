@@ -2,11 +2,10 @@ export type Tenant = {
   area: number;
   city_id: string;
   description: string;
-  image: string;
-  prefecture_id: string;
+  images: string[];
+  prefecture_id: string | null;
   location: Location;
   rent: number;
-  subsidy_id: string;
   title: string;
 };
 
