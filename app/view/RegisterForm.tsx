@@ -35,7 +35,7 @@ const schema = z.object({
 
 export type FormValues = z.infer<typeof schema>;
 
-export const Form = () => {
+export const RegisterForm = () => {
   const {
     register,
     handleSubmit,

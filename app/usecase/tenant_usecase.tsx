@@ -1,13 +1,14 @@
 import { GetFileURL, PostDoc } from "@/app/repository";
 import { Collection } from "@/app/entity/tenant";
-import { Tenant } from "@/app/entity";
+import { Tenant, Storage } from "@/app/entity";
 import { GenerateRandomId, GetLatLngFromAddress } from "@/app/util";
 import { Cities } from "@/app/consts/cities";
-import { FormValues } from "@/app/view/form";
+import { FormValues } from "@/app/view/RegisterForm";
 import { UploadFile } from "@/app/repository";
 
 export const PostTenant = async (data: FormValues) => {
   const document_id = GenerateRandomId();
+  const tenant_images_id = GenerateRandomId();
 
   // TODO: cityIDの取得関数を実装する
   const cityID = Cities[0].id;
@@ -24,7 +25,7 @@ export const PostTenant = async (data: FormValues) => {
 
   // すべての画像アップロードのPromiseを保持する配列を作成
   const uploadPromises = data.images.map((image) =>
-    uploadFileAndGetURL("tenant_images", image)
+    uploadFileAndGetURL(Storage.TENANT, tenant_images_id, image)
   );
 
   try {
@@ -54,8 +55,12 @@ export const PostTenant = async (data: FormValues) => {
   }
 };
 
-const uploadFileAndGetURL = async (folderName: string, image: File) => {
-  const path = `${folderName}/${image.name}`;
+const uploadFileAndGetURL = async (
+  category: string,
+  id: string,
+  image: File
+) => {
+  const path = `${category}/${id}/${image.name}`;
   await UploadFile(path, image);
 
   const url = await GetFileURL(path);
