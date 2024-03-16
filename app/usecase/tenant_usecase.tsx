@@ -39,20 +39,5 @@ export const PostTenant = async (data: FormValues) => {
     title: data.title,
   };
 
-  const mockTenant: Tenant = {
-    area: 300,
-    city_id: "city_1",
-    description: "築20年の物件, 駅から徒歩5分の好立地",
-    images: ["imagelink"],
-    prefecture_id: "prefecture_1",
-    location: {
-      address: "東京都千代田区",
-      latitude: 35.682839,
-      longitude: 139.759455,
-    },
-    rent: 200000,
-    title: "title",
-  };
-
-  PostDoc<Tenant>(Collection.TENANT, document_id, mockTenant);
+  PostDoc<Tenant>(Collection.TENANT, document_id, tenant);
 };

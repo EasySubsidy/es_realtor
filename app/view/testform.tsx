@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { PostTenant } from "@/app/usecase";
 import { GetAddress } from "@/app/util";
-import { PostTest } from "@/app/repository";
+// import { PostTest } from "@/app/repository";
 
 const schema = z.object({
   title: z.string().min(1, "This is required."),
@@ -17,19 +17,19 @@ const schema = z.object({
   address: z.string().min(1, "This is required."),
   area: z.preprocess((v) => Number(v), z.number().min(1, "This is required.")),
   rent: z.preprocess((v) => Number(v), z.number().min(1, "This is required.")),
-  //   images: z
-  //     .array(z.instanceof(File))
-  //     .nonempty("This is required.")
-  //     .refine((files) => files.every((file) => file.size < 5000000), {
-  //       message: "File size should be less than 5MB",
-  //     })
-  //     .refine(
-  //       (files) =>
-  //         files.every((file) => ["image/png", "image/jpeg"].includes(file.type)),
-  //       {
-  //         message: "Invalid file type",
-  //       }
-  //     ),
+  // images: z
+  //   .array(z.instanceof(F))
+  //   .nonempty("This is required.")
+  //   .refine((files) => files.every((file) => file.size < 5000000), {
+  //     message: "File size should be less than 5MB",
+  //   })
+  //   .refine(
+  //     (files) =>
+  //       files.every((file) => ["image/png", "image/jpeg"].includes(file.type)),
+  //     {
+  //       message: "Invalid file type",
+  //     }
+  //   ),
   description: z.string(),
 });
 
@@ -60,12 +60,12 @@ export const Form = () => {
     PostTenant(data);
   };
 
-  const onClick = async () => {
-    console.log("clicked");
-    await PostTest()
-      .then(() => console.log("done"))
-      .catch((e) => console.error(e));
-  };
+  // const onClick = async () => {
+  //   console.log("clicked");
+  //   await PostTest()
+  //     .then(() => console.log("done"))
+  //     .catch((e) => console.error(e));
+  // };
 
   return (
     <form
@@ -82,7 +82,7 @@ export const Form = () => {
         <input
           {...register("title")}
           id="title"
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500 text-black"
         />
         {errors.title && (
           <p className="text-sm text-red-500">{errors.title.message}</p>
@@ -100,7 +100,7 @@ export const Form = () => {
           <input
             {...register("postalCode")}
             id="postalCode"
-            className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+            className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500 text-black"
           />
           <button
             type="button"
@@ -125,7 +125,7 @@ export const Form = () => {
         <input
           {...register("address")}
           id="address"
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500 text-black"
         />
         {errors.address && (
           <p className="text-sm text-red-500">{errors.address.message}</p>
@@ -142,7 +142,7 @@ export const Form = () => {
         <input
           {...register("area")}
           id="area"
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500 text-black"
         />
         {errors.area && (
           <p className="text-sm text-red-500">{errors.area.message}</p>
@@ -159,7 +159,7 @@ export const Form = () => {
         <input
           {...register("rent")}
           id="rent"
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500 text-black"
         />
         {errors.rent && (
           <p className="text-sm text-red-500">{errors.rent.message}</p>
@@ -198,7 +198,7 @@ export const Form = () => {
         <textarea
           {...register("description")}
           id="description"
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500 text-black"
         />
       </div>
 
@@ -207,13 +207,12 @@ export const Form = () => {
         value="送信"
         className="w-full rounded-md bg-blue-500 py-2 text-white hover:bg-blue-600"
       />
-
-      <button
+      {/* <button
         onClick={onClick}
         className="rounded-md bg-blue-500 py-2 text-white hover:bg-blue-600 mt-4"
       >
         テスト関数
-      </button>
+      </button> */}
     </form>
   );
 };
