@@ -3,7 +3,7 @@ import { Collection } from "@/app/entity/tenant";
 import { Tenant, Storage } from "@/app/entity";
 import { GenerateRandomId, GetLatLngFromAddress } from "@/app/util";
 import { Cities } from "@/app/consts/cities";
-import { FormValues } from "@/app/view/RegisterForm";
+import { FormValues } from "@/app/components/RegisterForm";
 import { UploadFile } from "@/app/repository";
 
 export const PostTenant = async (data: FormValues) => {

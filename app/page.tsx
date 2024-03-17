@@ -1,9 +1,10 @@
-import { RegisterForm } from "@/app/view/RegisterForm";
+"use client";
+
+import { AuthContextProvider } from "@/app/context/AuthContext";
+import type { AppProps } from "next/app";
+import { usePathname } from "next/navigation";
+import { ProtectedRoute } from "@/app/components/ProtectedRoute";
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <RegisterForm />
-    </main>
-  );
+  return <AuthContextProvider></AuthContextProvider>;
 }

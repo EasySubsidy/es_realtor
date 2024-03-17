@@ -2,10 +2,17 @@
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+} from "firebase/auth";
+import {
   getFirestore,
   collection,
   addDoc,
   getDocs,
+  getDoc,
   doc,
   setDoc,
 } from "firebase/firestore";
@@ -28,16 +35,27 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
+const auth = getAuth(app);
+const tenantID = process.env.NEXT_PUBLIC_FIREBASE_TENANT_ID_FOR_REALTOR || "";
+auth.tenantId = tenantID;
+
+const googleProvider = new GoogleAuthProvider();
 
 export {
   storage,
   db,
+  auth,
   doc,
   setDoc,
+  getDoc,
   collection,
   addDoc,
   getDocs,
   ref,
   uploadBytes,
   getDownloadURL,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  googleProvider,
 };
