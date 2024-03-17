@@ -1,7 +1,7 @@
 "use client";
 
+import { useState } from "react";
 import {
-  Box,
   Button,
   Center,
   chakra,
@@ -14,12 +14,8 @@ import {
   Spacer,
   useToast,
 } from "@chakra-ui/react";
-import {
-  createUserWithEmailAndPassword,
-  getAuth,
-  sendEmailVerification,
-} from "firebase/auth";
-import { FormEvent, useState } from "react";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+
 import { app } from "@/firebase";
 import { useRouter } from "next/navigation";
 
@@ -32,32 +28,23 @@ export const LoginPage = () => {
   const auth = getAuth(app);
   const router = useRouter();
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    setIsLoading(true);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      await sendEmailVerification(userCredential.user);
-      setEmail("");
-      setPassword("");
+      await signInWithEmailAndPassword(auth, email, password);
       toast({
-        title: "確認メールを送信しました。",
+        title: "ログインに成功しました。",
         status: "success",
         position: "top",
       });
-      //! 一時的にコメントアウト
-      // router.push("/");
-    } catch (e) {
+      router.push("/"); // ログイン成功後にリダイレクト
+    } catch (error) {
       toast({
-        title: "エラーが発生しました。",
+        title: "ログインに失敗しました。",
         status: "error",
         position: "top",
       });
-      console.error(e);
     } finally {
       setIsLoading(false);
     }
@@ -65,41 +52,39 @@ export const LoginPage = () => {
 
   return (
     <Container py={14}>
-      <Heading>サインアップ</Heading>
+      <Heading>ログイン</Heading>
       <chakra.form onSubmit={handleSubmit}>
         <Spacer height={8} aria-hidden />
         <Grid gap={4}>
-          <Box display={"contents"}>
-            <FormControl>
-              <FormLabel>メールアドレス</FormLabel>
-              <Input
-                type={"email"}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                style={{
-                  color: "black",
-                }}
-                required
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>パスワード</FormLabel>
-              <Input
-                type={"password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={{
-                  color: "black",
-                }}
-                required
-              />
-            </FormControl>
-          </Box>
+          <FormControl>
+            <FormLabel>メールアドレス</FormLabel>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{
+                color: "black",
+              }}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>パスワード</FormLabel>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{
+                color: "black",
+              }}
+            />
+          </FormControl>
         </Grid>
         <Spacer height={4} aria-hidden />
         <Center>
-          <Button type={"submit"} isLoading={isLoading}>
-            アカウントを作成
+          <Button type="submit" isLoading={isLoading}>
+            ログイン
           </Button>
         </Center>
       </chakra.form>
