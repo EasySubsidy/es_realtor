@@ -8,29 +8,9 @@ import { Sidebar } from "@/app/_components";
 import Home from "@/app/page";
 
 const Dashboard = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const auth = getAuth(app);
-  const router = useRouter();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-        setLoading(false);
-      } else {
-        router.push("/login");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [auth, router]);
-
-  return loading ? (
-    <div>Loading...</div>
-  ) : (
+  return (
     <Home>
-      <Sidebar user={user} />
+      <Sidebar />
       <div className="flex flex-grow p-5">{children}</div>
     </Home>
   );

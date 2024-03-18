@@ -1,5 +1,7 @@
+import { use } from "react";
 import Dashboard from "../page";
 import { RegisterTenantForm } from "./RegisterForm";
+import { useAuth } from "@/app/_context";
 
 const RegisterTenantPage = () => {
   return (

@@ -6,7 +6,7 @@ import { Cities } from "@/app/_consts/cities";
 import { FormValues } from "@/app/(pages)/dashboard/register/RegisterForm";
 import { UploadFile } from "@/app/_repository";
 
-export const PostTenant = async (data: FormValues) => {
+export const PostTenant = async (data: FormValues, realtorID: string) => {
   const document_id = GenerateRandomId();
   const tenant_images_id = GenerateRandomId();
 
@@ -44,6 +44,7 @@ export const PostTenant = async (data: FormValues) => {
         latitude: latlng.lat,
         longitude: latlng.lng,
       },
+      realtor_id: realtorID,
       rent: data.rent,
       title: data.title,
     };
