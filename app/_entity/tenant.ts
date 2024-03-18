@@ -28,3 +28,9 @@ export enum Collection {
   TENANT = "tenant",
   REALTOR = "realtor",
 }
+
+export enum TenantField {
+  REALTOR_ID = "realtor_id",
+  CITY_ID = "city_id",
+  PREFECTURE_ID = "prefecture_id",
+}

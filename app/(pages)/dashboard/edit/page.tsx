@@ -1,10 +1,11 @@
 import Dashboard from "../page";
+import { TenantsView } from "./TenantsView";
 
 const EditTenantPage = () => {
   return (
     <Dashboard>
       <div className="w-full overflow-scroll">
-        テナント編集ページ{/* <EditTenantForm /> */}
+        <TenantsView />
       </div>
     </Dashboard>
   );

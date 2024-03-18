@@ -127,7 +127,7 @@ export const RegisterTenantForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="w-full mx-auto bg-white p-8 rounded-lg shadow"
     >
-      <h2 className="text-2xl font-semibold mb-8">物件登録</h2>
+      <h2 className="text-2xl font-semibold mb-8 text-black">物件登録</h2>
       <div className="mb-4">
         <label
           htmlFor="title"
