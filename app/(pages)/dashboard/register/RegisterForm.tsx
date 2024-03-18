@@ -10,7 +10,7 @@ import Image from "next/image";
 import { useAuth } from "@/app/_context";
 import { useRouter } from "next/navigation";
 import { useToast } from "@chakra-ui/react";
-import { set } from "firebase/database";
+import { paths } from "@/app/_consts";
 
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 const requiredErrorMessage = "この項目は必須です。";
@@ -37,7 +37,7 @@ const schema = z.object({
   images: z
     .custom<FileList>()
     .transform((filelist) => Array.from(filelist))
-    .refine((files) => files.every((file) => file.size <= 500000), {
+    .refine((files) => files.every((file) => file.size <= 5000000), {
       message: "File size should be less than 5mb.",
     })
     .refine(
@@ -85,15 +85,19 @@ export const RegisterTenantForm = () => {
 
   const fetchAddress = async () => {
     if (postalCode && postalCode.match(/^\d{3}-\d{4}$/)) {
+      console.log("Fetching address...");
       const address: string = await GetAddress(postalCode);
+      console.log("Fetched address:", address);
       setValue("address", address);
+    } else {
+      console.error("Invalid postal code.");
     }
   };
 
   const onSubmit: SubmitHandler<RegisterTenantFormValues> = (data) => {
     if (!currentUser) {
       console.error("Current user is not found.");
-      router.push("/login");
+      router.push(paths.login);
       return;
     }
     setLoading(true);

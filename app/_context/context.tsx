@@ -18,6 +18,7 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { paths } from "../_consts";
 
 type AuthContextType = {
   currentUser: User | null;
@@ -49,7 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     logout: async () => {
       await signOut(auth)
         .then(() => {
-          router.push("/login");
+          router.push(paths.login);
         })
         .catch((error) => {
           console.error(error);

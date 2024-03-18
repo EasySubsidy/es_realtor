@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
+import { paths } from "@/app/_consts";
 
 // Zod schema for form validation
 const schema = z.object({
@@ -44,7 +45,7 @@ export const LoginForm = () => {
         status: "success",
         position: "top",
       });
-      router.push("/dashboard"); // ログイン成功後にリダイレクト
+      router.push(paths.tenantsView); // ログイン成功後にリダイレクト
     } catch (error) {
       toast({
         title: "ログインに失敗しました。",
@@ -57,7 +58,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="w-full bg-gray-100 flex flex-col justify-center items-center">
+    <div className="w-full bg-gray-100 flex flex-col justify-center items-center text-black">
       <div className="bg-white shadow-lg rounded-lg p-8 w-96">
         <h2 className="text-2xl font-bold mb-6 text-gray-800">ログイン</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

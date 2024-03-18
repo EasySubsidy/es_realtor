@@ -1,3 +1,5 @@
+import { paths } from "@/app/_consts";
+
 type SidebarColumn = {
   title: string;
   path: string;
@@ -6,10 +8,10 @@ type SidebarColumn = {
 export const sidebarColumns: SidebarColumn[] = [
   {
     title: "テナント登録",
-    path: "/dashboard/register",
+    path: paths.tenantRegister,
   },
   {
-    title: "テナント編集",
-    path: "/dashboard/edit",
+    title: "テナント一覧",
+    path: paths.tenantsView,
   },
 ];

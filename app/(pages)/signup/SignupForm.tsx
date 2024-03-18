@@ -9,6 +9,7 @@ import { z } from "zod";
 import { registerRealtor } from "@/app/_usecase/realtor";
 import { useAuth } from "@/app/_context";
 import Link from "next/link";
+import { paths } from "@/app/_consts";
 
 const schema = z.object({
   email: z.string().email({ message: "無効なメールアドレスです" }),
@@ -43,7 +44,7 @@ export const SignUpForm = () => {
         position: "top",
       });
       registerRealtor(userCredential.user.uid, data);
-      router.push("/dashboard");
+      router.push(paths.tenantsView);
     } catch (error) {
       toast({
         title: "エラーが発生しました。",
@@ -55,7 +56,7 @@ export const SignUpForm = () => {
     }
   };
   return (
-    <div className="w-full bg-gray-100 flex flex-col justify-center items-center">
+    <div className="w-full bg-gray-100 flex flex-col justify-center items-center text-black">
       <div className="bg-white shadow-lg rounded-lg p-8 w-100">
         <h2 className="text-2xl font-bold mb-6 text-gray-800">サインアップ</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -106,7 +107,7 @@ export const SignUpForm = () => {
         <div className="flex mt-4 text-center gap-1 justify-center">
           <p>すでにアカウントをお持ちですか？</p>
           <Link
-            href="/login" // ログインページのパスに変更してください
+            href={paths.login} // ログインページのパスに変更してください
             className="text-blue-500 hover:text-blue-700"
           >
             ログイン

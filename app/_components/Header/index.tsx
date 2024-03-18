@@ -5,6 +5,7 @@ import "./header.css";
 import { useToast } from "@chakra-ui/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/app/_context";
+import { paths } from "@/app/_consts";
 
 export const Header = () => {
   const { currentUser, logout } = useAuth();
@@ -71,7 +72,7 @@ export const Header = () => {
           </p>
         ) : // ユーザー情報が存在せず、パスがルートの場合、ログインボタンを表示
         pathName === "/" ? (
-          <Link href="/login">
+          <Link href={paths.login}>
             <div className="flex flex-col items-center gap-2">
               {/* <Image src="/login.svg" alt="login" width={24} height={24} /> */}
               <p
@@ -88,7 +89,7 @@ export const Header = () => {
           </Link>
         ) : null}
 
-        {pathName.startsWith("/dashboard") ? (
+        {pathName.startsWith(paths.dashboard) ? (
           <button className="header-button" onClick={handleSignOut}>
             <div className="flex flex-col items-center gap-2">
               {/* <Image src="/menu.svg" alt="menu" width={24} height={24} /> */}
