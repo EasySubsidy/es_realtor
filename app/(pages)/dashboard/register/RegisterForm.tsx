@@ -9,32 +9,35 @@ import { GetAddress } from "@/app/_util";
 import Image from "next/image";
 import { useAuth } from "@/app/_context";
 import { useRouter } from "next/navigation";
+import { useToast } from "@chakra-ui/react";
+import { set } from "firebase/database";
 
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+const requiredErrorMessage = "この項目は必須です。";
 
 const schema = z.object({
-  title: z.string().min(1, "This is required."),
+  title: z.string().min(1, requiredErrorMessage),
   postalCode: z
     .string()
-    .min(1, "This is required.")
+    .min(1, requiredErrorMessage)
     .regex(/^\d{3}-\d{4}$/, "This is not a valid postal code."),
-  address: z.string().min(1, "This is required."),
+  address: z.string().min(1, requiredErrorMessage),
   nearest_station: z
     .string()
-    .min(1, "This is required.")
+    .min(1, requiredErrorMessage)
     .refine(
       (v) => {
         return v.endsWith("駅");
       },
       { message: "This should end with '駅'." }
     ),
-  nearest_station_address: z.string().min(1, "This is required."),
-  area: z.preprocess((v) => Number(v), z.number().min(1, "This is required.")),
-  rent: z.preprocess((v) => Number(v), z.number().min(1, "This is required.")),
+  nearest_station_address: z.string().min(1, requiredErrorMessage),
+  area: z.preprocess((v) => Number(v), z.number().min(1, requiredErrorMessage)),
+  rent: z.preprocess((v) => Number(v), z.number().min(1, requiredErrorMessage)),
   images: z
     .custom<FileList>()
     .transform((filelist) => Array.from(filelist))
-    .refine((files) => files.every((file) => file.size <= 5000000), {
+    .refine((files) => files.every((file) => file.size <= 500000), {
       message: "File size should be less than 5mb.",
     })
     .refine(
@@ -54,6 +57,7 @@ export const RegisterTenantForm = () => {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
     watch,
   } = useForm<RegisterTenantFormValues>({
@@ -62,8 +66,12 @@ export const RegisterTenantForm = () => {
 
   const { currentUser } = useAuth();
   const router = useRouter();
+  const toast = useToast();
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [submissionError, setSubmissionError] = useState("");
+
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % images.length);
   };
@@ -88,7 +96,30 @@ export const RegisterTenantForm = () => {
       router.push("/login");
       return;
     }
-    PostTenant(data, currentUser.uid);
+    setLoading(true);
+    PostTenant(data, currentUser.uid)
+      .then(() => {
+        reset();
+        toast({
+          title: "物件を登録しました。",
+          status: "success",
+          duration: 3000,
+          position: "bottom",
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        setSubmissionError("Failed to register the tenant.");
+        toast({
+          title: "物件を登録できませんでした。",
+          status: "error",
+          duration: 3000,
+          position: "top",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -292,11 +323,14 @@ export const RegisterTenantForm = () => {
         )}
       </div>
 
-      <input
+      <button
         type="submit"
-        value="送信"
+        disabled={loading}
         className="w-full rounded-md bg-blue-500 py-2 text-white hover:bg-blue-600"
-      />
+      >
+        {loading ? "処理中..." : "物件を登録"}
+      </button>
+      {submissionError && <p className="text-red-500">{submissionError}</p>}
     </form>
   );
 };
