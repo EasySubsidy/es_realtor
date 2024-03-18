@@ -4,12 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC } from "react";
 import { sidebarColumns } from "./sidebarColumns";
+import { useAuth } from "@/app/_context";
 
-type SidebarProps = {
-  user: User | null;
-};
-
-export const Sidebar: FC<SidebarProps> = () => {
+export const Sidebar: FC = () => {
+  const { currentUser } = useAuth();
   const pathname = usePathname();
 
   const isActive = (path: string) => path === pathname;

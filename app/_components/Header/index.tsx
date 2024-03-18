@@ -9,6 +9,7 @@ import { useAuth } from "@/app/_context";
 export const Header = () => {
   const { currentUser, logout } = useAuth();
   const toast = useToast();
+  const router = useRouter();
   const pathName = usePathname();
 
   const handleSignOut = async () => {
@@ -19,6 +20,7 @@ export const Header = () => {
         status: "success",
         position: "top",
       });
+      router.push("/login");
     } catch (error) {
       toast({
         title: "ログアウト中にエラーが発生しました。",
@@ -69,8 +71,8 @@ export const Header = () => {
             {currentUser.email} <br />
             さんようこそ
           </p>
-        ) : (
-          // ユーザー情報が存在しない場合、ログインボタンを表示
+        ) : // ユーザー情報が存在せず、パスがルートの場合、ログインボタンを表示
+        pathName === "/" ? (
           <Link href="/login">
             <div className="flex flex-col items-center gap-2">
               {/* <Image src="/login.svg" alt="login" width={24} height={24} /> */}
@@ -86,7 +88,7 @@ export const Header = () => {
               </p>
             </div>
           </Link>
-        )}
+        ) : null}
 
         {pathName.startsWith("/dashboard") ? (
           <button className="header-button" onClick={handleSignOut}>

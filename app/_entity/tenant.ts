@@ -5,6 +5,7 @@ export type Tenant = {
   images: string[];
   prefecture_id: string | null;
   location: Location;
+  realtor_id: string;
   rent: number;
   title: string;
 };

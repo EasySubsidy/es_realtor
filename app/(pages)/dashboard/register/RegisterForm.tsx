@@ -3,10 +3,12 @@
 import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PostTenant } from "@/app/_usecase/tenant";
 import { GetAddress } from "@/app/_util";
 import Image from "next/image";
+import { useAuth } from "@/app/_context";
+import { useRouter } from "next/navigation";
 
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
@@ -46,6 +48,16 @@ export const RegisterTenantForm = () => {
     resolver: zodResolver(schema),
   });
 
+  const { currentUser } = useAuth();
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   if (!currentUser) {
+  //     console.error("Current user is not found.");
+  //     router.push("/login");
+  //   }
+  // }, [currentUser, router]);
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % images.length);
@@ -66,7 +78,12 @@ export const RegisterTenantForm = () => {
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    PostTenant(data);
+    if (!currentUser) {
+      console.error("Current user is not found.");
+      router.push("/login");
+      return;
+    }
+    PostTenant(data, currentUser.uid);
   };
 
   return (
