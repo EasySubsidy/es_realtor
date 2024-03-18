@@ -2,31 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 
 import "./header.css";
-import { app } from "@/firebase";
 import { useToast } from "@chakra-ui/react";
-import { FirebaseError } from "firebase/app";
 import { usePathname, useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
-import { User, getAuth, signOut, onAuthStateChanged } from "firebase/auth";
-import path from "path";
+import { useAuth } from "@/app/_context";
 
-type HeaderProps = {
-  user: User | null;
-};
-
-export const Header: FC<HeaderProps> = (props) => {
-  const { user } = props;
+export const Header = () => {
+  const { currentUser, logout } = useAuth();
   const toast = useToast();
-  const auth = getAuth(app);
   const pathName = usePathname();
-
-  const goToPage = (path: string) => {
-    window.location.href = path;
-  };
 
   const handleSignOut = async () => {
     try {
-      await signOut(auth);
+      await logout();
       toast({
         title: "ログアウトしました。",
         status: "success",
@@ -70,7 +57,7 @@ export const Header: FC<HeaderProps> = (props) => {
       "
       >
         {/* ユーザー情報が存在する場合、ユーザーネームを表示 */}
-        {user ? (
+        {currentUser ? (
           <p
             style={{
               fontSize: 16,
@@ -79,7 +66,7 @@ export const Header: FC<HeaderProps> = (props) => {
               textAlign: "center",
             }}
           >
-            {user.email} <br />
+            {currentUser.email} <br />
             さんようこそ
           </p>
         ) : (

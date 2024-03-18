@@ -9,7 +9,7 @@ type SidebarProps = {
   user: User | null;
 };
 
-export const Sidebar: FC<SidebarProps> = (props) => {
+export const Sidebar: FC<SidebarProps> = () => {
   const pathname = usePathname();
 
   const isActive = (path: string) => path === pathname;

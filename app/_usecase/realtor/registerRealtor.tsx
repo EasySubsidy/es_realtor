@@ -1,7 +1,7 @@
 import { GetFileURL, PostDoc } from "@/app/_repository";
 import { Collection } from "@/app/_entity/tenant";
 import { Tenant, Storage } from "@/app/_entity";
-import { SignupFormData } from "@/app/(pages)/signup/page";
+import { SignupFormData } from "@/app/(pages)/signup/SignupForm";
 import { Realtor } from "@/app/_entity/realtor";
 
 export const registerRealtor = async (uid: string, data: SignupFormData) => {
