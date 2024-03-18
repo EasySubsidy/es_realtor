@@ -6,17 +6,28 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendEmailVerification,
-  signOut,
   User,
 } from "firebase/auth";
 import { app } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { useToast } from "@chakra-ui/react";
 import Home from "@/app/page";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { registerRealtor } from "@/app/_usecase/realtor";
 
-const Page = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+// Zod schema for form validation
+const schema = z.object({
+  email: z.string().email({ message: "無効なメールアドレスです" }),
+  password: z
+    .string()
+    .min(6, { message: "パスワードは6文字以上である必要があります" }),
+});
+
+export type SignupFormData = z.infer<typeof schema>;
+
+const SignupPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
@@ -32,23 +43,30 @@ const Page = () => {
     return () => unsubscribe();
   }, [auth]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     setIsLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
-        email,
-        password
+        data.email,
+        data.password
       );
       await sendEmailVerification(userCredential.user);
-      setEmail("");
-      setPassword("");
       toast({
         title: "確認メールを送信しました。",
         status: "success",
         position: "top",
       });
+      const uid = userCredential.user.uid;
+      registerRealtor(uid, data);
       router.push("/dashboard");
     } catch (error) {
       toast({
@@ -68,7 +86,7 @@ const Page = () => {
           <h2 className="text-2xl font-bold mb-6 text-gray-800">
             サインアップ
           </h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label
                 htmlFor="email"
@@ -79,11 +97,12 @@ const Page = () => {
               <input
                 id="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
+                {...register("email")}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
+              {errors.email && (
+                <p className="text-red-500">{errors.email.message}</p>
+              )}
             </div>
             <div>
               <label
@@ -95,11 +114,12 @@ const Page = () => {
               <input
                 id="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
+                {...register("password")}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
+              {errors.password && (
+                <p className="text-red-500">{errors.password.message}</p>
+              )}
             </div>
             <div className="flex justify-center">
               <button
@@ -111,13 +131,10 @@ const Page = () => {
               </button>
             </div>
           </form>
-          <div className="mt-4 flex flex-col items-center">
-            {user ? <div>ログイン状態です: {user.email}</div> : null}
-          </div>
         </div>
       </div>
     </Home>
   );
 };
 
-export default Page;
+export default SignupPage;

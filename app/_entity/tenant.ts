@@ -17,4 +17,5 @@ type Location = {
 
 export enum Collection {
   TENANT = "tenant",
+  REALTOR = "realtor",
 }
