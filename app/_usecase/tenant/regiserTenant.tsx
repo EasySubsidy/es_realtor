@@ -2,21 +2,38 @@ import { GetFileURL, PostDoc } from "@/app/_repository";
 import { Collection } from "@/app/_entity/tenant";
 import { Tenant, Storage } from "@/app/_entity";
 import { GenerateRandomId, GetLatLngFromAddress } from "@/app/_util";
-import { Cities } from "@/app/_consts/cities";
-import { FormValues } from "@/app/(pages)/dashboard/register/RegisterForm";
+import { cities, prefectures } from "@/app/_consts";
+import { RegisterTenantFormValues } from "@/app/(pages)/dashboard/register/RegisterForm";
 import { UploadFile } from "@/app/_repository";
 
-export const PostTenant = async (data: FormValues, realtorID: string) => {
+/**
+ * テナント情報を登録するusecase
+ * @param data
+ * @param realtorID
+ * @returns
+ */
+export const PostTenant = async (
+  data: RegisterTenantFormValues,
+  realtorID: string
+) => {
   const document_id = GenerateRandomId();
   const tenant_images_id = GenerateRandomId();
 
-  // TODO: cityIDの取得関数を実装する
-  const cityID = Cities[0].id;
-  const prefectureID = null;
+  // TODO: cityID, PrefectureIDの取得関数を実装する
+  const cityID = cities[0].id;
+  const prefectureID = prefectures[0].id;
 
-  const latlng = await GetLatLngFromAddress(data.address);
-  if (!latlng) {
-    console.error("Failed to get latitude and longitude");
+  const tenantlatlng = await GetLatLngFromAddress(data.address);
+  if (!tenantlatlng) {
+    console.error("Failed to get tenant latitude and longitude");
+    return;
+  }
+
+  const nearestStationlatlng = await GetLatLngFromAddress(
+    data.nearest_station_address
+  );
+  if (!nearestStationlatlng) {
+    console.error("Failed to get nearest station latitude and longitude");
     return;
   }
 
@@ -32,20 +49,25 @@ export const PostTenant = async (data: FormValues, realtorID: string) => {
     const urls = await Promise.all(uploadPromises);
     imageURLList = urls;
 
-    console.log("imageURLList", imageURLList);
     const tenant: Tenant = {
       area: data.area,
       city_id: cityID,
       description: data.description,
       images: imageURLList,
-      prefecture_id: prefectureID,
       location: {
         address: data.address,
-        latitude: latlng.lat,
-        longitude: latlng.lng,
+        latitude: tenantlatlng.lat,
+        longitude: tenantlatlng.lng,
       },
+      prefecture_id: prefectureID,
       realtor_id: realtorID,
       rent: data.rent,
+      station: {
+        address: data.nearest_station_address,
+        name: data.nearest_station,
+        latitude: nearestStationlatlng.lat,
+        longitude: nearestStationlatlng.lng,
+      },
       title: data.title,
     };
 
