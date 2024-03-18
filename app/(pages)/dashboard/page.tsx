@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { RegisterForm } from "@/app/(pages)/dashboard/Register.tsx/RegisterForm";
 import { Header } from "@/app/_components/Header";
 import { AppProps } from "next/app";
-import { child } from "firebase/database";
 
 const Dashboard = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
