@@ -19,7 +19,7 @@ import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { app } from "@/firebase";
 import { useRouter } from "next/navigation";
 
-export const LoginPage = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -38,7 +38,7 @@ export const LoginPage = () => {
         status: "success",
         position: "top",
       });
-      router.push("/"); // ログイン成功後にリダイレクト
+      router.push("/dashboard"); // ログイン成功後にリダイレクト
     } catch (error) {
       toast({
         title: "ログインに失敗しました。",

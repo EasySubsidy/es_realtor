@@ -1,4 +1,5 @@
-import { storage, ref, uploadBytes } from "@/firebase";
+import { ref, uploadBytes } from "@firebase/storage";
+import { storage } from "@/firebase";
 
 // Firebase Storageにファイルをアップロードする
 export const UploadFile = async (storagePath: string, file: Blob | File) => {

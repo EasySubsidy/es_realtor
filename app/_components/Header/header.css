@@ -1,0 +1,11 @@
+.header-button {
+  background-color: #619191; /* デフォルトの背景色 */
+  color: #000000; /* デフォルトのテキスト色 */
+  transition: background-color 0.3s, color 0.3s, transform 0.3s; /* 背景色、テキスト色、変形の変更を滑らかに */
+}
+
+.header-button:hover {
+  background-color: #619191; /* ホバー時の背景色 */
+  color: #374151; /* ホバー時のテキスト色 */
+  transform: scale(1.1); /* ホバー時に要素を10%拡大 */
+}

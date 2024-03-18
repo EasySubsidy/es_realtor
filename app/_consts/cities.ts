@@ -1,4 +1,4 @@
-import { City } from "@/app/entity/city";
+import { City } from "@/app/_entity/city";
 
 export const Cities: City[] = [
   {

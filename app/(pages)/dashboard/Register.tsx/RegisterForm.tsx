@@ -4,8 +4,8 @@ import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { PostTenant } from "@/app/usecase";
-import { GetAddress } from "@/app/util";
+import { PostTenant } from "@/app/_usecase/tenant";
+import { GetAddress } from "@/app/_util";
 import Image from "next/image";
 
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];

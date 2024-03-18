@@ -27,23 +27,10 @@ import {
 import { useRouter } from "next/navigation";
 import { FormEvent, useState, useEffect } from "react";
 
-//TODO 現状ログイン機能しかないので情報を登録できるようにする
+//TODO: 現状ログイン機能しかないので情報を登録できるようにする
 
-export const Page = () => {
-  //TODO 必要最低限しか書いていないのでリダイレクト等指定必要
-  // const { loginWithGoogle } = useAuth();
-  // const router = useRouter();
-
-  // const handleLoginWithGoogle = async () => {
-  //   try {
-  //     await loginWithGoogle();
-  //     router.push("/"); // ログイン成功後のリダイレクト先
-  //   } catch (error) {
-  //     console.error(error);
-  //     router.push("/signup"); // ログイン失敗後のリダイレクト先
-  //   }
-  // };
-
+const Page = () => {
+  //TODO: 必要最低限しか書いていないのでリダイレクト等指定必要
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -79,7 +66,7 @@ export const Page = () => {
         position: "top",
       });
       //! 一時的にコメントアウト
-      // router.push("/");
+      router.push("/dashboard");
     } catch (e) {
       toast({
         title: "エラーが発生しました。",

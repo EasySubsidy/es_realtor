@@ -1,4 +1,5 @@
-import { storage, ref, getDownloadURL } from "@/firebase";
+import { ref, getDownloadURL } from "@firebase/storage";
+import { storage } from "@/firebase";
 
 // Firebase Storageにファイルをアップロードする
 export const GetFileURL = async (filePath: string): Promise<string> => {
