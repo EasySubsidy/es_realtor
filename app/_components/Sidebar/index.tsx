@@ -1,8 +1,9 @@
 // components/Sidebar.tsx
-import { User } from "@/app/_entity/user";
+import { User } from "@firebase/auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC } from "react";
+import { sidebarColumns } from "./sidebarColumns";
 
 type SidebarProps = {
   user: User | null;
@@ -20,10 +21,10 @@ export const Sidebar: FC<SidebarProps> = (props) => {
           {sidebarColumns.map((column) => {
             return (
               <li key={column.title} className="mb-3">
-                <Link href="/dashboard">
+                <Link href={column.path}>
                   <p
                     className={`flex items-center p-2 rounded-lg ${
-                      isActive("/dashboard")
+                      isActive(column.path)
                         ? "bg-gray-700"
                         : "hover:bg-gray-700"
                     }`}
@@ -34,44 +35,6 @@ export const Sidebar: FC<SidebarProps> = (props) => {
               </li>
             );
           })}
-          <li className="mb-3">
-            <Link href="/dashboard">
-              <p
-                className={`flex items-center p-2 rounded-lg ${
-                  isActive("/dashboard") ? "bg-gray-700" : "hover:bg-gray-700"
-                }`}
-              >
-                <span className="ml-3">ダッシュボード</span>
-              </p>
-            </Link>
-          </li>
-          <li className="mb-3">
-            <Link href="/dashboard/register">
-              <p
-                className={`flex items-center p-2 rounded-lg ${
-                  isActive("/dashboard/register")
-                    ? "bg-gray-700"
-                    : "hover:bg-gray-700"
-                }`}
-              >
-                <span className="ml-3">登録</span>
-              </p>
-            </Link>
-          </li>
-          <li className="mb-3">
-            <Link href="/dashboard/edit">
-              <p
-                className={`flex items-center p-2 rounded-lg ${
-                  isActive("/dashboard/edit")
-                    ? "bg-gray-700"
-                    : "hover:bg-gray-700"
-                }`}
-              >
-                <span className="ml-3">編集</span>
-              </p>
-            </Link>
-          </li>
-          {/* 他のリンクを追加 */}
         </ul>
       </nav>
     </aside>

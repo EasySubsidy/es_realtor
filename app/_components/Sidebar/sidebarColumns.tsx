@@ -1,28 +1,15 @@
 type SidebarColumn = {
   title: string;
-  url: string;
-  authProtected: boolean;
+  path: string;
 };
 
 export const sidebarColumns: SidebarColumn[] = [
   {
-    title: "ダッシュボード",
-    url: "/dashboard",
-    authProtected: false,
-  },
-  {
     title: "テナント登録",
-    url: "/dashboard/register",
-    authProtected: true,
+    path: "/dashboard/register",
   },
   {
     title: "テナント編集",
-    url: "/dashboard/edit",
-    authProtected: true,
-  },
-  {
-    title: "新規登録",
-    url: "/signup",
-    authProtected: false,
+    path: "/dashboard/edit",
   },
 ];

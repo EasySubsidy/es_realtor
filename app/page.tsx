@@ -18,8 +18,7 @@ export default function Home({ children }: { children: React.ReactNode }) {
         setUser(currentUser);
         setLoading(false);
       } else {
-        // ログインしていない場合、ログインページにリダイレクト
-        router.push("/login");
+        setLoading(false);
       }
     });
 
@@ -27,12 +26,15 @@ export default function Home({ children }: { children: React.ReactNode }) {
   }, [auth, router]);
 
   return (
-    <div className="h-screen flex flex-col m-0">
+    <div className="h-screen flex flex-col m-0 bg-white">
       <Header user={user} />
-      <div className="flex overflow-hidden bg-gray-100 h-full">
-        <Sidebar user={user} />
-        <div className="flex flex-grow p-5">{children}</div>
-      </div>
+      {loading ? (
+        <p>loading...</p>
+      ) : (
+        <div className="flex overflow-hidden bg-gray-100 h-full">
+          {children}
+        </div>
+      )}
     </div>
   );
 }

@@ -2,8 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 import "./header.css";
+import { app } from "@/firebase";
+import { useToast } from "@chakra-ui/react";
+import { FirebaseError } from "firebase/app";
+import { usePathname, useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
-import { User, getAuth, onAuthStateChanged } from "firebase/auth";
+import { User, getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import path from "path";
 
 type HeaderProps = {
   user: User | null;
@@ -11,9 +16,30 @@ type HeaderProps = {
 
 export const Header: FC<HeaderProps> = (props) => {
   const { user } = props;
+  const toast = useToast();
+  const auth = getAuth(app);
+  const pathName = usePathname();
 
   const goToPage = (path: string) => {
     window.location.href = path;
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      toast({
+        title: "ログアウトしました。",
+        status: "success",
+        position: "top",
+      });
+    } catch (error) {
+      toast({
+        title: "ログアウト中にエラーが発生しました。",
+        status: "error",
+        position: "top",
+      });
+      console.error(error);
+    }
   };
 
   return (
@@ -58,47 +84,40 @@ export const Header: FC<HeaderProps> = (props) => {
           </p>
         ) : (
           // ユーザー情報が存在しない場合、ログインボタンを表示
-          <button
-            className="header-button"
-            onClick={() => {
-              goToPage("/pages/login");
-            }}
-          >
-            {/* <Link href="/pages/login"> */}
-            <a>
-              <div className="flex flex-col items-center gap-2">
-                <Image src="/login.svg" alt="login" width={24} height={24} />
-                <p
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 700,
-                    // color: "#000000",
-                    textAlign: "center",
-                  }}
-                >
-                  ログイン
-                </p>
-              </div>
-            </a>
-            {/* </Link> */}
-          </button>
+          <Link href="/login">
+            <div className="flex flex-col items-center gap-2">
+              {/* <Image src="/login.svg" alt="login" width={24} height={24} /> */}
+              <p
+                style={{
+                  fontSize: 16,
+                  fontWeight: 700,
+                  // color: "#000000",
+                  textAlign: "center",
+                }}
+              >
+                ログイン
+              </p>
+            </div>
+          </Link>
         )}
 
-        <button className="header-button">
-          <div className="flex flex-col items-center gap-2">
-            {/* <Image src="/menu.svg" alt="menu" width={24} height={24} /> */}
-            <p
-              style={{
-                fontSize: 16,
-                fontWeight: 700,
-                // color: "#000000",
-                textAlign: "center",
-              }}
-            >
-              メニュー
-            </p>
-          </div>
-        </button>
+        {pathName.startsWith("/dashboard") ? (
+          <button className="header-button" onClick={handleSignOut}>
+            <div className="flex flex-col items-center gap-2">
+              {/* <Image src="/menu.svg" alt="menu" width={24} height={24} /> */}
+              <p
+                style={{
+                  fontSize: 16,
+                  fontWeight: 700,
+                  // color: "#000000",
+                  textAlign: "center",
+                }}
+              >
+                サインアウト
+              </p>
+            </div>
+          </button>
+        ) : null}
       </div>
     </div>
   );
