@@ -9,7 +9,6 @@ import { useAuth } from "@/app/_context";
 export const Header = () => {
   const { currentUser, logout } = useAuth();
   const toast = useToast();
-  const router = useRouter();
   const pathName = usePathname();
 
   const handleSignOut = async () => {
