@@ -17,7 +17,7 @@ const schema = z.object({
 
 type LoginFormData = z.infer<typeof schema>;
 
-export const LoginPage = () => {
+export const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
@@ -105,9 +105,10 @@ export const LoginPage = () => {
             </button>
           </div>
         </form>
-        <div className="mt-4 text-center">
+        <div className="flex gap-1 mt-4 text-center justify-center">
+          <p>新規登録は</p>
           <Link href="/signup" className="text-blue-500 hover:text-blue-700">
-            新規登録はこちら
+            こちら
           </Link>
         </div>
       </div>

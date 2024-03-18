@@ -103,7 +103,7 @@ export const SignUpForm = () => {
             </button>
           </div>
         </form>
-        <div className="flex mt-4 text-center gap-1">
+        <div className="flex mt-4 text-center gap-1 justify-center">
           <p>すでにアカウントをお持ちですか？</p>
           <Link
             href="/login" // ログインページのパスに変更してください
