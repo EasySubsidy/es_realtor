@@ -17,6 +17,7 @@ import {
   UserCredential,
   sendEmailVerification,
 } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 type AuthContextType = {
   currentUser: User | null;
@@ -31,6 +32,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -44,7 +46,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     currentUser,
     login: (email: string, password: string) =>
       signInWithEmailAndPassword(auth, email, password),
-    logout: () => signOut(auth),
+    logout: async () => {
+      await signOut(auth)
+        .then(() => {
+          router.push("/login");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
     signUp: async (email: string, password: string) => {
       const userCredential = await createUserWithEmailAndPassword(
         auth,

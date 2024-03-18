@@ -20,7 +20,6 @@ export const Header = () => {
         status: "success",
         position: "top",
       });
-      router.push("/login");
     } catch (error) {
       toast({
         title: "ログアウト中にエラーが発生しました。",
