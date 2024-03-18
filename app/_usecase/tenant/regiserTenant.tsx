@@ -1,10 +1,10 @@
-import { GetFileURL, PostDoc } from "@/app/repository";
-import { Collection } from "@/app/entity/tenant";
-import { Tenant, Storage } from "@/app/entity";
-import { GenerateRandomId, GetLatLngFromAddress } from "@/app/util";
-import { Cities } from "@/app/consts/cities";
-import { FormValues } from "@/app/view/RegisterForm";
-import { UploadFile } from "@/app/repository";
+import { GetFileURL, PostDoc } from "@/app/_repository";
+import { Collection } from "@/app/_entity/tenant";
+import { Tenant, Storage } from "@/app/_entity";
+import { GenerateRandomId, GetLatLngFromAddress } from "@/app/_util";
+import { Cities } from "@/app/_consts/cities";
+import { FormValues } from "@/app/(pages)/dashboard/Register.tsx/RegisterForm";
+import { UploadFile } from "@/app/_repository";
 
 export const PostTenant = async (data: FormValues) => {
   const document_id = GenerateRandomId();

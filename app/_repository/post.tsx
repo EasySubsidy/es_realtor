@@ -1,5 +1,6 @@
-import { db, doc, setDoc } from "@/firebase";
-import { Collection } from "@/app/entity/tenant";
+import { doc, setDoc } from "@firebase/firestore";
+import { db } from "@/firebase";
+import { Collection } from "@/app/_entity/tenant";
 
 // Firebase Realtime Databaseにドキュメントを保存する
 export const PostDoc = async <T extends { [x: string]: any }>(
