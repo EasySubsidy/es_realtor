@@ -4,9 +4,7 @@ import { useEffect, useState } from "react";
 import { User, getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "@/firebase";
 import { useRouter } from "next/navigation";
-import { RegisterForm } from "@/app/(pages)/dashboard/Register.tsx/RegisterForm";
-import { Header } from "@/app/_components/Header";
-import { AppProps } from "next/app";
+import { Header, Sidebar } from "@/app/_components";
 
 const Dashboard = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -30,9 +28,12 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
   return loading ? (
     <div>Loading...</div>
   ) : (
-    <div className="w-full h-full">
+    <div className="h-screen flex flex-col m-0">
       <Header user={user} />
-      {children}
+      <div className="flex overflow-hidden bg-gray-100 h-full">
+        <Sidebar />
+        <div className="flex flex-grow p-5">{children}</div>
+      </div>
     </div>
   );
 };
