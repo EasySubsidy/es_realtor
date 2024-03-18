@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PostTenant } from "@/app/_usecase/tenant";
 import { GetAddress } from "@/app/_util";
 import Image from "next/image";
@@ -19,6 +19,16 @@ const schema = z.object({
     .min(1, "This is required.")
     .regex(/^\d{3}-\d{4}$/, "This is not a valid postal code."),
   address: z.string().min(1, "This is required."),
+  nearest_station: z
+    .string()
+    .min(1, "This is required.")
+    .refine(
+      (v) => {
+        return v.endsWith("駅");
+      },
+      { message: "This should end with '駅'." }
+    ),
+  nearest_station_address: z.string().min(1, "This is required."),
   area: z.preprocess((v) => Number(v), z.number().min(1, "This is required.")),
   rent: z.preprocess((v) => Number(v), z.number().min(1, "This is required.")),
   images: z
@@ -32,10 +42,12 @@ const schema = z.object({
         files.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type)),
       { message: "Only these types are allowed: .jpg, .jpeg, .png" }
     ),
-  description: z.string(),
+  description: z
+    .string()
+    .max(1000, "This should be less than 1000 characters."),
 });
 
-export type FormValues = z.infer<typeof schema>;
+export type RegisterTenantFormValues = z.infer<typeof schema>;
 
 export const RegisterTenantForm = () => {
   const {
@@ -44,19 +56,12 @@ export const RegisterTenantForm = () => {
     setValue,
     formState: { errors },
     watch,
-  } = useForm<FormValues>({
+  } = useForm<RegisterTenantFormValues>({
     resolver: zodResolver(schema),
   });
 
   const { currentUser } = useAuth();
   const router = useRouter();
-
-  // useEffect(() => {
-  //   if (!currentUser) {
-  //     console.error("Current user is not found.");
-  //     router.push("/login");
-  //   }
-  // }, [currentUser, router]);
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const nextSlide = () => {
@@ -77,7 +82,7 @@ export const RegisterTenantForm = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  const onSubmit: SubmitHandler<RegisterTenantFormValues> = (data) => {
     if (!currentUser) {
       console.error("Current user is not found.");
       router.push("/login");
@@ -149,6 +154,44 @@ export const RegisterTenantForm = () => {
         />
         {errors.address && (
           <p className="text-sm text-red-500">{errors.address.message}</p>
+        )}
+      </div>
+
+      <div className="mb-4">
+        <label
+          htmlFor="nearest_station"
+          className="block text-sm font-semibold text-gray-700"
+        >
+          最寄駅:
+        </label>
+        <input
+          {...register("nearest_station")}
+          id="nearest_station"
+          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500 text-black"
+        />
+        {errors.nearest_station && (
+          <p className="text-sm text-red-500">
+            {errors.nearest_station.message}
+          </p>
+        )}
+      </div>
+
+      <div className="mb-4">
+        <label
+          htmlFor="nearest_station_address"
+          className="block text-sm font-semibold text-gray-700"
+        >
+          最寄駅の住所:
+        </label>
+        <input
+          {...register("nearest_station_address")}
+          id="nearest_station_address"
+          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500 text-black"
+        />
+        {errors.nearest_station_address && (
+          <p className="text-sm text-red-500">
+            {errors.nearest_station_address.message}
+          </p>
         )}
       </div>
 
@@ -244,6 +287,9 @@ export const RegisterTenantForm = () => {
           id="description"
           className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500 text-black"
         />
+        {errors.description && (
+          <p className="text-sm text-red-500">{errors.description.message}</p>
+        )}
       </div>
 
       <input
