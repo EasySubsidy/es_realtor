@@ -1,6 +1,5 @@
 // TODO: userのentityを作成する
-export type User = {
-  id: string;
-  name: string;
+export type Realtor = {
+  // name: string;
   email: string;
 };

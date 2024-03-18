@@ -1,39 +1,34 @@
 "use client";
 
-import { app } from "@/firebase";
+import { useState, useEffect } from "react";
 import {
-  Box,
-  Button,
-  Center,
-  chakra,
-  Container,
-  FormControl,
-  FormLabel,
-  Grid,
-  Heading,
-  Input,
-  Spacer,
-  useToast,
-} from "@chakra-ui/react";
-import { FirebaseError } from "firebase/app";
-import {
-  createUserWithEmailAndPassword,
   getAuth,
+  createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendEmailVerification,
-  signOut,
   User,
 } from "firebase/auth";
+import { app } from "@/firebase";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState, useEffect } from "react";
+import { useToast } from "@chakra-ui/react";
+import Home from "@/app/page";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { registerRealtor } from "@/app/_usecase/realtor";
 
-//TODO: 現状ログイン機能しかないので情報を登録できるようにする
+// Zod schema for form validation
+const schema = z.object({
+  email: z.string().email({ message: "無効なメールアドレスです" }),
+  password: z
+    .string()
+    .min(6, { message: "パスワードは6文字以上である必要があります" }),
+});
 
-const Page = () => {
-  //TODO: 必要最低限しか書いていないのでリダイレクト等指定必要
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+export type SignupFormData = z.infer<typeof schema>;
+
+const SignupPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   const toast = useToast();
@@ -48,116 +43,98 @@ const Page = () => {
     return () => unsubscribe();
   }, [auth]);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     setIsLoading(true);
-    e.preventDefault();
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
-        email,
-        password
+        data.email,
+        data.password
       );
       await sendEmailVerification(userCredential.user);
-      setEmail("");
-      setPassword("");
       toast({
         title: "確認メールを送信しました。",
         status: "success",
         position: "top",
       });
-      //! 一時的にコメントアウト
+      const uid = userCredential.user.uid;
+      registerRealtor(uid, data);
       router.push("/dashboard");
-    } catch (e) {
+    } catch (error) {
       toast({
         title: "エラーが発生しました。",
         status: "error",
         position: "top",
       });
-      if (e instanceof FirebaseError) {
-        console.log(e);
-      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      setUser(null);
-      toast({
-        title: "ログアウトしました。",
-        status: "success",
-        position: "top",
-      });
-    } catch (error) {
-      toast({
-        title: "ログアウト中にエラーが発生しました。",
-        status: "error",
-        position: "top",
-      });
-      console.error(error);
-    }
-  };
-
   return (
-    <Container py={14}>
-      <Heading>サインアップ</Heading>
-      <chakra.form onSubmit={handleSubmit}>
-        <Spacer height={8} aria-hidden />
-        <Grid gap={4}>
-          <Box display={"contents"}>
-            <FormControl>
-              <FormLabel>メールアドレス</FormLabel>
-              <Input
-                type={"email"}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                style={{
-                  color: "black",
-                }}
+    <Home>
+      <div className="w-full bg-gray-100 flex flex-col justify-center items-center">
+        <div className="bg-white shadow-lg rounded-lg p-8 w-96">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            サインアップ
+          </h2>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                メールアドレス
+              </label>
+              <input
+                id="email"
+                type="email"
+                {...register("email")}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
-            </FormControl>
-            <FormControl>
-              <FormLabel>パスワード</FormLabel>
-              <Input
-                type={"password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={{
-                  color: "black",
-                }}
+              {errors.email && (
+                <p className="text-red-500">{errors.email.message}</p>
+              )}
+            </div>
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                パスワード
+              </label>
+              <input
+                id="password"
+                type="password"
+                {...register("password")}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
-            </FormControl>
-          </Box>
-        </Grid>
-        <Spacer height={4} aria-hidden />
-        <Center>
-          <Button type={"submit"} isLoading={isLoading}>
-            アカウントを作成
-          </Button>
-        </Center>
-      </chakra.form>
-      <Center mt={4}>
-        {user ? (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <div>ログイン状態です: {user.email}</div>
-            <Button onClick={handleSignOut} mt={2}>
-              ログアウトボタン
-            </Button>
-          </div>
-        ) : (
-          <div>ログアウト状態です</div>
-        )}
-      </Center>
-    </Container>
+              {errors.password && (
+                <p className="text-red-500">{errors.password.message}</p>
+              )}
+            </div>
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                {isLoading ? "処理中..." : "アカウントを作成"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </Home>
   );
 };
 
-export default Page;
+export default SignupPage;
