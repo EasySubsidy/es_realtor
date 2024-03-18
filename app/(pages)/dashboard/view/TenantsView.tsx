@@ -6,6 +6,7 @@ import { getTenants } from "@/app/_usecase/tenant/getTenants";
 import { Tenant } from "@/app/_entity";
 import Image from "next/image";
 
+// TODO: ローディング画面の実装
 export const TenantsView: React.FC = () => {
   const [tenants, setTenants] = useState<Tenant[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
