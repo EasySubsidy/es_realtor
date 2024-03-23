@@ -8,7 +8,11 @@ import { Sidebar } from "@/app/_components";
 import Home from "@/app/page";
 import { ReactNode } from "react";
 
-const Dashboard = ({ children }: { children: ReactNode }) => {
+type Props = {
+  children: ReactNode;
+};
+
+const Dashboard = ({ children }: Props) => {
   return (
     <Home>
       <Sidebar />
