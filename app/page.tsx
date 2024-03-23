@@ -23,12 +23,8 @@ export default function Home() {
   }, [currentUser]);
 
   return (
-    <div className="w-screen h-screen bg-white">
-      {currentUser ? (
-        <p className="text-black">ログイン</p>
-      ) : (
-        <p className="text-black">何もない</p>
-      )}
+    <div className="w-screen h-screen bg-white flex justify-center items-center">
+      <div className="animate-spin rounded-full h-80 w-80 border-t-2 border-b-2 border-green-800"></div>
     </div>
   );
 }
