@@ -22,11 +22,11 @@ export const TenantsView: React.FC = () => {
   const fetchTenants = async () => {
     if (currentUser) {
       try {
-        const tenants = await getTenants(currentUser.uid);
-        if (!tenants) {
+        const TenantsRes = await getTenants(currentUser.uid);
+        if (!TenantsRes) {
           throw new Error("Tenants not found");
         }
-        setTenants(tenants);
+        setTenants(TenantsRes);
       } catch (error) {
         console.error(error);
       }
@@ -35,7 +35,7 @@ export const TenantsView: React.FC = () => {
 
   useEffect(() => {
     fetchTenants();
-  });
+  }, []);
 
   return (
     <div className="text-black w-full h-full mx-auto bg-white p-8 rounded-lg shadow flex flex-col justify-between">
