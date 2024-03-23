@@ -35,7 +35,7 @@ export const TenantsView: React.FC = () => {
 
   useEffect(() => {
     fetchTenants();
-  });
+  }, []);
 
   return (
     <div className="text-black w-full h-full mx-auto bg-white p-8 rounded-lg shadow flex flex-col justify-between">
