@@ -6,8 +6,9 @@ import { app } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "@/app/_components";
 import Home from "@/app/page";
+import { ReactNode } from "react";
 
-const Dashboard = ({ children }: { children: React.ReactNode }) => {
+const Dashboard = ({ children }: { children: ReactNode }) => {
   return (
     <Home>
       <Sidebar />
