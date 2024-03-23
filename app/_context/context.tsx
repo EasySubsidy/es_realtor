@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
+      if (currentUser !== user) setCurrentUser(user);
     });
 
     return unsubscribe;
@@ -51,6 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await signOut(auth)
         .then(() => {
           router.push(paths.login);
+          setCurrentUser(null);
         })
         .catch((error) => {
           console.error(error);

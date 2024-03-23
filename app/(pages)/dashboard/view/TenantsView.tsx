@@ -22,11 +22,11 @@ export const TenantsView: React.FC = () => {
   const fetchTenants = async () => {
     if (currentUser) {
       try {
-        const tenants = await getTenants(currentUser.uid);
-        if (!tenants) {
+        const TenantsRes = await getTenants(currentUser.uid);
+        if (!TenantsRes) {
           throw new Error("Tenants not found");
         }
-        setTenants(tenants);
+        setTenants(TenantsRes);
       } catch (error) {
         console.error(error);
       }

@@ -4,7 +4,7 @@ import { SignUpForm } from "./SignupForm";
 
 export default function SignupPage() {
   return (
-    <div>
+    <div className="flex flex-grow">
       <SignUpForm />
     </div>
   );
