@@ -5,11 +5,14 @@ import { useEffect, useState } from "react";
 import { getTenants } from "@/app/_usecase/tenant/getTenants";
 import { Tenant } from "@/app/_entity";
 import Image from "next/image";
+import { paths } from "@/app/_consts";
+import { useRouter } from "next/navigation";
 
 // TODO: ローディング画面の実装
 export const TenantsView: React.FC = () => {
   const [tenants, setTenants] = useState<Tenant[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
   const itemsPerPage = 5;
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -34,6 +37,11 @@ export const TenantsView: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!currentUser) {
+      router.push(paths.login);
+      return;
+    }
+
     fetchTenants();
   }, []);
 
