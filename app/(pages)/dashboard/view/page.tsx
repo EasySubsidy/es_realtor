@@ -1,7 +1,7 @@
 import Dashboard from "../page";
 import { TenantsView } from "./TenantsView";
 
-const EditTenantPage = () => {
+export default function EditTenantPage() {
   return (
     <Dashboard>
       <div className="w-full overflow-scroll">
@@ -9,6 +9,4 @@ const EditTenantPage = () => {
       </div>
     </Dashboard>
   );
-};
-
-export default EditTenantPage;
+}

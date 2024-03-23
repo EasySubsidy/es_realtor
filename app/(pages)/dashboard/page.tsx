@@ -12,13 +12,11 @@ type Props = {
   children: ReactNode;
 };
 
-const Dashboard = ({ children }: Props) => {
+export default function Dashboard({ children }: Props) {
   return (
     <Home>
       <Sidebar />
       <div className="flex flex-grow p-5">{children}</div>
     </Home>
   );
-};
-
-export default Dashboard;
+}

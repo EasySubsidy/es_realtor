@@ -3,7 +3,7 @@ import Dashboard from "../page";
 import { RegisterTenantForm } from "./RegisterForm";
 import { useAuth } from "@/app/_context";
 
-const RegisterTenantPage = () => {
+export default function RegisterTenantPage() {
   return (
     <Dashboard>
       <div className="w-full overflow-scroll">
@@ -11,6 +11,4 @@ const RegisterTenantPage = () => {
       </div>
     </Dashboard>
   );
-};
-
-export default RegisterTenantPage;
+}

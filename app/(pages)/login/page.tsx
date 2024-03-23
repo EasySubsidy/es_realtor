@@ -3,12 +3,10 @@
 import Home from "@/app/page";
 import { LoginForm } from "./LoginForm";
 
-const LoginPage = () => {
+export default function LoginPage() {
   return (
     <Home>
       <LoginForm />
     </Home>
   );
-};
-
-export default LoginPage;
+}
