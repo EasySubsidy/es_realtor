@@ -235,7 +235,7 @@ export const RegisterTenantForm = () => {
           htmlFor="area"
           className="block text-sm font-semibold text-gray-700"
         >
-          面積:
+          面積（m²）:
         </label>
         <input
           {...register("area")}
@@ -252,7 +252,7 @@ export const RegisterTenantForm = () => {
           htmlFor="rent"
           className="block text-sm font-semibold text-gray-700"
         >
-          賃料:
+          賃料（円）:
         </label>
         <input
           {...register("rent")}
