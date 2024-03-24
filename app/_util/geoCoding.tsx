@@ -8,9 +8,10 @@ export const GetLatLngFromAddress = async (
   try {
     const response = await axios.get(url);
     const latlng: number[] = response.data[0].geometry.coordinates;
+    // console.log(latlng);
 
     if (latlng) {
-      return { lat: latlng[0], lng: latlng[1] };
+      return { lat: latlng[1], lng: latlng[0] };
     } else {
       console.error("Geolonia API error: No data found");
       return null;
