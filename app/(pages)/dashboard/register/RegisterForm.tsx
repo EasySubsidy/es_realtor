@@ -157,7 +157,7 @@ export const RegisterTenantForm = () => {
           htmlFor="postalCode"
           className="block text-sm font-semibold text-gray-700"
         >
-          郵便番号:
+          郵便番号（ハイフンあり）:
         </label>
         <div className="flex">
           <input
