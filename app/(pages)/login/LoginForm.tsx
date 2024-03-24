@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@chakra-ui/react";
 import { useAuth } from "@/app/_context";
@@ -23,7 +23,7 @@ export const LoginForm = () => {
 
   const toast = useToast();
   const router = useRouter();
-  const { login } = useAuth();
+  const { currentUser, login } = useAuth();
 
   const {
     register,

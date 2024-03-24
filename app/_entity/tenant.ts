@@ -1,4 +1,5 @@
 export type Tenant = {
+  id: string;
   area: number;
   city_id: string;
   description: string;

@@ -15,7 +15,7 @@ export const getDocuments = async <T,>(query: Query<DocumentData>) => {
     const querySnapshot = await getDocs(query);
     const data: T[] = [];
     querySnapshot.forEach((doc) => {
-      data.push({ ...doc.data() } as T);
+      data.push({ ...doc.data(), id: doc.id } as T);
     });
     return data;
   } catch (error) {
