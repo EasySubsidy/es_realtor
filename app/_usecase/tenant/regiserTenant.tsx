@@ -45,6 +45,8 @@ export const PostTenant = async (
     uploadFileAndGetURL(Storage.TENANT, tenant_images_id, image)
   );
 
+  const descriptionArray = data.description.split("\n");
+
   try {
     const urls = await Promise.all(uploadPromises);
     imageURLList = urls;
@@ -52,7 +54,7 @@ export const PostTenant = async (
     const tenant: Partial<Tenant> = {
       area: data.area,
       city_id: cityID,
-      description: data.description,
+      description: descriptionArray,
       images: imageURLList,
       location: {
         address: data.address,
