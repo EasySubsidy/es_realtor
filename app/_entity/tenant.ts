@@ -2,7 +2,7 @@ export type Tenant = {
   id: string;
   area: number;
   city_id: string;
-  description: string;
+  description: string[];
   images: string[];
   prefecture_id: string | null;
   location: Location;
