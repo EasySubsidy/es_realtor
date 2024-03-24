@@ -63,7 +63,7 @@ export const Header = () => {
             style={{
               fontSize: 16,
               fontWeight: 700,
-              color: "#000",
+              color: "#fff",
               textAlign: "center",
             }}
           >
@@ -79,7 +79,7 @@ export const Header = () => {
                 style={{
                   fontSize: 16,
                   fontWeight: 700,
-                  // color: "#000000",
+                  color: "#fff",
                   textAlign: "center",
                 }}
               >
@@ -97,7 +97,7 @@ export const Header = () => {
                 style={{
                   fontSize: 16,
                   fontWeight: 700,
-                  // color: "#000000",
+                  color: "#fff",
                   textAlign: "center",
                 }}
               >

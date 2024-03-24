@@ -1,9 +1,8 @@
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
 import { Tenant } from "@/app/_entity";
 import { deleteTenant, getTenants } from "@/app/_usecase/tenant";
-import { get } from "http";
 
 type DropdownProps = {
   tenantId: string;
@@ -34,9 +33,9 @@ export const Dropdown = (props: DropdownProps) => {
     <div className="text-right">
       <Menu as="div" className="relative inline-block text-left">
         <div>
-          <Menu.Button className="inline-flex w-full justify-center rounded-md bg-black/20 p-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
-            <ChevronDownIcon
-              className="h-5 w-5 text-violet-200 hover:text-violet-100"
+          <Menu.Button className="inline-flex w-full justify-center rounded-md p-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
+            <EllipsisHorizontalIcon
+              className="h-5 w-5 text-black"
               aria-hidden="true"
             />
           </Menu.Button>
@@ -51,7 +50,7 @@ export const Dropdown = (props: DropdownProps) => {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none overflow-visible z-10">
-            <div className="px-1 py-1 ">
+            {/* <div className="px-1 py-1 ">
               <Menu.Item>
                 {({ active }) => (
                   <button
@@ -74,7 +73,7 @@ export const Dropdown = (props: DropdownProps) => {
                   </button>
                 )}
               </Menu.Item>
-            </div>
+            </div> */}
             <div className="px-1 py-1">
               <Menu.Item>
                 {({ active }) => (
