@@ -79,7 +79,7 @@ export const TenantsView: React.FC = () => {
             {currentItems.map((tenant) => (
               <div
                 key={tenant.title}
-                className="flex bg-gray-200 py-2 pl-2 pr-4 gap-4 "
+                className="flex py-2 pl-2 pr-4 gap-4 hover:bg-gray-200 rounded-md"
               >
                 <Image
                   src={tenant.images[0]}
