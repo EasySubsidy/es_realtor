@@ -289,12 +289,14 @@ export const RegisterTenantForm = () => {
             <div className="relative w-full">
               <div className="absolute inset-0 flex justify-between items-center">
                 <button
+                  type="button"
                   onClick={prevSlide}
                   className="bg-gray-200 hover:bg-gray-300 p-2 rounded-full"
                 >
                   ‹
                 </button>
                 <button
+                  type="button"
                   onClick={nextSlide}
                   className="bg-gray-200 hover:bg-gray-300 p-2 rounded-full"
                 >
