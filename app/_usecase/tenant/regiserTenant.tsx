@@ -49,7 +49,7 @@ export const PostTenant = async (
     const urls = await Promise.all(uploadPromises);
     imageURLList = urls;
 
-    const tenant: Tenant = {
+    const tenant: Partial<Tenant> = {
       area: data.area,
       city_id: cityID,
       description: data.description,
@@ -71,7 +71,7 @@ export const PostTenant = async (
       title: data.title,
     };
 
-    PostDoc<Tenant>(Collection.TENANT, document_id, tenant);
+    PostDoc<Partial<Tenant>>(Collection.TENANT, document_id, tenant);
   } catch (error) {
     console.error("upload file was failed", error);
     return;

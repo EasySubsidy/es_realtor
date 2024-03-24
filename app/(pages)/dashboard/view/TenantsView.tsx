@@ -7,6 +7,8 @@ import { Tenant } from "@/app/_entity";
 import Image from "next/image";
 import { paths } from "@/app/_consts";
 import { useRouter } from "next/navigation";
+import { Dropdown } from "@/app/_components/DropdownMenu";
+import { deleteTenant } from "@/app/_usecase/tenant/deleteTenant";
 
 // TODO: ローディング画面の実装
 export const TenantsView: React.FC = () => {
@@ -36,25 +38,49 @@ export const TenantsView: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (!currentUser) {
-      router.push(paths.login);
-      return;
-    }
+  const handleDelete = (tenantID: string) => {
+    deleteTenant(tenantID)
+      .then(() => {
+        console.log("successfully deleted");
+        if (currentUser) {
+          getTenants(currentUser.uid).then((res) => {
+            if (res) {
+              setTenants(res);
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to delete tenants", error);
+        return;
+      });
+  };
 
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (!currentUser) {
+        // currentUser が null の場合、ログインページに遷移
+        router.push(paths.login);
+      }
+    }, 300); // 300ミリ秒遅延させる
+
+    () => clearTimeout(timeoutId);
     fetchTenants();
   }, []);
 
   return (
     <div className="text-black w-full h-full mx-auto bg-white p-8 rounded-lg shadow flex flex-col justify-between">
-      <div>
+      <div className="">
         <h2 className="text-2xl font-semibold mb-8 text-black">物件一覧</h2>
         {currentItems.length === 0 ? (
           <p>登録している物件がありません</p>
         ) : (
-          <div className="rounded-lg overflow-hidden">
+          <div className="rounded-lg">
             {currentItems.map((tenant) => (
-              <div key={tenant.title} className="flex bg-gray-200 p-2 gap-4">
+              <div
+                key={tenant.title}
+                className="flex bg-gray-200 py-2 pl-2 pr-4 gap-4 "
+              >
                 <Image
                   src={tenant.images[0]}
                   alt={tenant.title}
@@ -63,13 +89,18 @@ export const TenantsView: React.FC = () => {
                   height={50}
                   className="rounded-lg"
                 />
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col flex-grow gap-1">
                   <h2 className="text font-semibold">{`物件名: ${tenant.title}`}</h2>
                   <p>{`住所: ${tenant.location.address}`}</p>
                   <p className="text-lg font-semibold">
                     {`賃料: ${tenant.rent}` + "円"}
                   </p>
                 </div>
+                <Dropdown
+                  tenantId={tenant.id}
+                  uid={currentUser?.uid}
+                  setTenants={setTenants}
+                />
               </div>
             ))}
           </div>

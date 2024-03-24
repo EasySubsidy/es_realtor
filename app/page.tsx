@@ -17,7 +17,7 @@ export default function Home() {
         // currentUser が存在する場合、テナントビューページに遷移
         router.push(paths.tenantsView);
       }
-    }, 300); // 300ミリ秒遅延させる
+    }, 500); // 300ミリ秒遅延させる
 
     return () => clearTimeout(timeoutId);
   }, [currentUser]);
