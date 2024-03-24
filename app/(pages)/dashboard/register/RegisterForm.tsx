@@ -37,6 +37,9 @@ const schema = z.object({
   images: z
     .custom<FileList>()
     .transform((filelist) => Array.from(filelist))
+    .refine((files) => files.length > 1, {
+      message: "2枚以上の画像を入力してください",
+    })
     .refine((files) => files.every((file) => file.size <= 5000000), {
       message: "File size should be less than 5mb.",
     })
